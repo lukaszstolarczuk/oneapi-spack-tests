@@ -1,10 +1,14 @@
 # SPDX-FileCopyrightText: 2019-2026 Intel Corporation
 #
 # SPDX-License-Identifier: MIT
+name: Test intel-oneapi packages
 
 on:
   push:
   pull_request:
+
+permissions:
+  contents: read
 
 # Cancel duplicate runs, e.g., when both push and PR trigger for the same branch
 concurrency:
@@ -21,8 +25,8 @@ jobs:
   checks:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.12'
     - name: Install prerequisites
@@ -43,8 +47,8 @@ jobs:
     steps:
     - name: CPUtype
       run: lscpu
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.12'
     - name: Install prerequisites
@@ -52,13 +56,13 @@ jobs:
           python -m pip install --quiet --upgrade pip
           pip install --quiet -r requirements.txt
     - name: Install spack
-      uses: actions/checkout@v4
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: ${{ env.SPACK_REPO }}
         path: spack
         ref: ${{ env.SPACK_BRANCH }}
     - name: Install spack packages
-      uses: actions/checkout@v4
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: ${{ env.SPACK_PKGS_REPO }}
         path: spack-packages
@@ -74,7 +78,7 @@ jobs:
       run: |
         source spack/share/spack/setup-env.sh
         pytest -s tests/test_packages.py::test_load
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: failure()
       with:
         name: gcc-${{ matrix.part }}-logs
@@ -97,8 +101,8 @@ jobs:
     steps:
     - name: CPUtype
       run: lscpu
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
       with:
         python-version: '3.12'
     - name: Install prerequisites
@@ -106,13 +110,13 @@ jobs:
           python -m pip install --quiet --upgrade pip
           pip install --quiet -r requirements.txt
     - name: Install spack
-      uses: actions/checkout@v4
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: ${{ env.SPACK_REPO }}
         path: spack
         ref: ${{ env.SPACK_BRANCH }}
     - name: Install spack packages
-      uses: actions/checkout@v4
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         repository: ${{ env.SPACK_PKGS_REPO }}
         path: spack-packages
@@ -127,7 +131,7 @@ jobs:
         spack clean --downloads
         spack compiler add `spack location -i intel-oneapi-compilers`/compiler/latest/bin
         pytest -s tests/test_packages.py::test_${{ matrix.compiler }}_${{ matrix.part }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
       if: failure()
       with:
         name: ${{ matrix.compiler }}-${{ matrix.part }}-logs
