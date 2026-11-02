@@ -18,8 +18,8 @@ concurrency:
 env:
   SPACK_REPO: spack/spack
   SPACK_BRANCH: develop
-  SPACK_PKGS_REPO: spack/spack-packages
-  SPACK_PKGS_BRANCH: develop
+  SPACK_PKGS_REPO: lukaszstolarczuk/spack-packages
+  SPACK_PKGS_BRANCH: intel-oneapi-2026.2.0-plus
 
 jobs:
   checks:
